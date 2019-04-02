@@ -9,7 +9,8 @@ const RadiomanService = require('./RadiomanService');
 // Set up server
 const mongoose = require('mongoose');
 const autoIncrement = require('mongoose-auto-increment');
-mongoose.connect('mongodb://localhost:27017/test', {useNewUrlParser: true});
+const MONGO_DEV = 'mongodb://localhost:27017/test'
+mongoose.connect(process.env.MONGODB_URL || MONGO_DEV , {useNewUrlParser: true});
 autoIncrement.initialize(mongoose);
 
 const setup = {mongoose: mongoose, autoIncrement: autoIncrement}
