@@ -37,7 +37,7 @@ module.exports = class RadiomanService {
     begin() {
 
         // Repeat every 5 seconds
-        setInterval(this.tick.bind(this), 5000);
+        setInterval(this.tick.bind(this), 60000);
     }
 
     tick() {
