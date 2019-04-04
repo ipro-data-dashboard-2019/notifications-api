@@ -57,8 +57,8 @@ module.exports = class GmailService {
               mid: id,
               snippet: full.data.snippet,
               body: this.flattenPlainText(full.data.payload),
-              from: full.data.payload.headers.find(i => i.name == "Subject").value,
-              subject: full.data.payload.headers.find(i => i.name == "From").value
+              subject: full.data.payload.headers.find(i => i.name == "Subject").value,
+              from: full.data.payload.headers.find(i => i.name == "From").value
             })
 
             notif.save();
@@ -67,7 +67,7 @@ module.exports = class GmailService {
       }
     }
 
-    // Return big string paragraph
+    // Return big string paragraph. Very limited. Only works for plaintext
     flattenPlainText(part) {
       var content = "";
       if (part.mimeType == 'text/plain') {

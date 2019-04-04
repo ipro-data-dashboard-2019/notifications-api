@@ -16,15 +16,21 @@ autoIncrement.initialize(mongoose);
 
 const setup = {mongoose: mongoose, autoIncrement: autoIncrement}
 
+app.use(function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    next();
+});
+
 console.log("LISTENING ON: " + process.env.PORT);
-app.listen(process.env.PORT || 3001);
+app.listen(process.env.PORT);
 
 /**
  * RADIOMAN
  */
-//const rs = new RadiomanService(setup);
+const rs = new RadiomanService(setup);
 //rs.purge(); //DUMP THE DATABASE
-//rs.begin();
+rs.begin();
 
 /**
  * GMAIL
