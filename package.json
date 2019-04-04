@@ -5,10 +5,13 @@
   "main": "Server.js",
   "dependencies": {
     "express": "^4.16.4",
-    "mongoose-auto-increment": "^5.0.1",
+    "googleapis": "^39.1.0",
     "mongoose": "^5.4.19",
+    "mongoose-auto-increment": "^5.0.1",
     "node-html-parser": "^1.1.12",
     "request": "^2.88.0",
+    "server-destroy": "^1.0.1",
+    "url": "^0.11.0",
     "xml2js": "^0.4.19"
   },
   "devDependencies": {},

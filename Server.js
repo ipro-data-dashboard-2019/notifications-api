@@ -5,6 +5,7 @@ const Notification = require('./Notification');
 const ServiceAggregator = require('./ServiceAggregator');
 
 const RadiomanService = require('./RadiomanService');
+const GmailService = require('./GmailService')
 
 // Set up server
 const mongoose = require('mongoose');
@@ -18,18 +19,23 @@ const setup = {mongoose: mongoose, autoIncrement: autoIncrement}
 /**
  * RADIOMAN
  */
-const rs = new RadiomanService(setup);
+//const rs = new RadiomanService(setup);
 //rs.purge(); //DUMP THE DATABASE
-rs.begin();
+//rs.begin();
+
+const gs = new GmailService(setup, _ => {
+    gs.begin();
+});
 
 
 // Aggregate services and setup endpoints for them
-const serviceAggregator = new ServiceAggregator(app, [rs]);
+const serviceAggregator = new ServiceAggregator(app, [gs]);
 
 app.post('/test/', function (req, res) {
     console.log("received")
     return res.send('received');
 });
 
+console.log("LISTENING ON: " + process.env.PORT);
 app.listen(process.env.PORT || 3001);
 
