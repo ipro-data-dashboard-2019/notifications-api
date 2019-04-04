@@ -16,6 +16,9 @@ autoIncrement.initialize(mongoose);
 
 const setup = {mongoose: mongoose, autoIncrement: autoIncrement}
 
+console.log("LISTENING ON: " + process.env.PORT);
+app.listen(process.env.PORT || 3001);
+
 /**
  * RADIOMAN
  */
@@ -23,19 +26,10 @@ const setup = {mongoose: mongoose, autoIncrement: autoIncrement}
 //rs.purge(); //DUMP THE DATABASE
 //rs.begin();
 
-const gs = new GmailService(setup, _ => {
+const gs = new GmailService(setup, app, _ => {
     gs.begin();
 });
 
 
-// Aggregate services and setup endpoints for them
-const serviceAggregator = new ServiceAggregator(app, [gs]);
-
-app.post('/test/', function (req, res) {
-    console.log("received")
-    return res.send('received');
-});
-
-console.log("LISTENING ON: " + process.env.PORT);
-app.listen(process.env.PORT || 3001);
-
+// // Aggregate services and setup endpoints for them
+// const serviceAggregator = new ServiceAggregator(app, [gs]);

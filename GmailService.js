@@ -8,7 +8,7 @@ const GMAIL_URL_ID = 'gmail';
 
 module.exports = class GmailService {
 
-    constructor(setup, onLogin) {
+    constructor(setup, app, onLogin) {
 
         this.GmailNotification = require('./models/GmailNotification')(setup);
 
@@ -16,22 +16,14 @@ module.exports = class GmailService {
         this.oauth2Client = new google.auth.OAuth2(
             process.env.CLIENT_ID,
             process.env.CLIENT_SECRET,
-            "http://localhost:3000"
+            process.env.AUTH_URL
           );
 
         google.options({auth: this.oauth2Client});
-        this.authenticate(scopes).then(onLogin)
+        this.authenticate(scopes, app).then(onLogin)
     }
 
     async begin() {
-
-      let results = [];
-
-      await this.GmailNotification.find({}, (err, matches) => {
-          results = matches;
-      }).sort({_id: 1})
-
-      console.log(results);
 
       this.gmail = google.gmail({
         version: 'v1',
@@ -100,36 +92,22 @@ module.exports = class GmailService {
       return "";
     }
 
-    async authenticate(scopes) {
+    async authenticate(scopes, app) {
         return new Promise((resolve, reject) => {
           // grab the url that will be used for authorization
           const authorizeUrl = this.oauth2Client.generateAuthUrl({
             access_type: 'offline',
             scope: scopes.join(' '),
           });
-          const server = http
-            .createServer(async (req, res) => {
-              try {
-                  const qs = new url.URL(req.url, 'http://localhost:3000')
-                    .searchParams;
-                  res.end('Authentication successful! Please return to the console.');
-                  server.destroy();
-                  const {tokens} = await this.oauth2Client.getToken(qs.get('code'));
+          console.log('Authenticate with URL: ' + authorizeUrl)
 
-                  this.oauth2Client.credentials = tokens;
-                  resolve();
-                
-              } catch (e) {
-                console.log('oopsies');
-                reject(e);
-              }
-            })
-            .listen(3000, () => {
-              // open the browser to the authorize url to start the workflow
+          app.get("/auth/", async (req, resp) => {
+            resp.end('Authentication successful! Please return to the console.');
+            const {tokens} = await this.oauth2Client.getToken(req.query.code);
 
-              console.log('Authenticate with URL: ' + authorizeUrl)
-            });
-          destroyer(server);
+            this.oauth2Client.credentials = tokens;
+            resolve();
+          })
         });
       }
 
