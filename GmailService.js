@@ -30,7 +30,7 @@ module.exports = class GmailService {
         auth: this.oauth2Client,
       });
 
-      setInterval(this.tick.bind(this), 10000);
+      setInterval(this.tick.bind(this), 60000);
     }
 
     async tick() {
@@ -45,12 +45,12 @@ module.exports = class GmailService {
           // Notification exists, do not save or report
           if(count > 0){
               //document exists
-              console.log('Skipping: ' + id)
+              //console.log('Skipping: ' + id)
           }
 
           // New Notificaiton, create and save
           else {
-            console.log('Adding: ' + id)
+            //console.log('Adding: ' + id)
             const full = await this.gmail.users.messages.get({userId: 'me', id: id, format: 'full'});
                     
             var notif = new this.GmailNotification({

@@ -26,10 +26,13 @@ app.listen(process.env.PORT || 3001);
 //rs.purge(); //DUMP THE DATABASE
 //rs.begin();
 
+/**
+ * GMAIL
+ */
 const gs = new GmailService(setup, app, _ => {
     gs.begin();
 });
 
 
 // // Aggregate services and setup endpoints for them
-// const serviceAggregator = new ServiceAggregator(app, [gs]);
+const serviceAggregator = new ServiceAggregator(app, [gs]);
