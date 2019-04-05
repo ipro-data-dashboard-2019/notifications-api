@@ -4,6 +4,7 @@
   "description": "API for aggregating and delivering notifications from multiple sources",
   "main": "Server.js",
   "dependencies": {
+    "body-parser": "^1.18.3",
     "express": "^4.16.4",
     "googleapis": "^39.1.0",
     "mongoose": "^5.4.19",
