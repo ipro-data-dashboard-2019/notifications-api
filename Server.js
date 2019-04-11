@@ -30,19 +30,19 @@ app.listen(process.env.PORT);
 /**
  * RADIOMAN
  */
-// const rs = new RadiomanService(setup);
-// //rs.purge(); //DUMP THE DATABASE
-// rs.begin();
+const rs = new RadiomanService(setup);
+//rs.purge(); //DUMP THE DATABASE
+rs.begin();
 
 /**
  * GMAIL
  */
-// const gs = new GmailService(setup, app, _ => {
-//     gs.begin();
-// });
+const gs = new GmailService(setup, app, _ => {
+    gs.begin();
+});
 
 const sms = new SMSSerice(setup, app);
 
 
-// // Aggregate services and setup endpoints for them
-const serviceAggregator = new ServiceAggregator(app, [sms]);
+// Aggregate services and setup endpoints for them
+const serviceAggregator = new ServiceAggregator(app, [rs, gs, sms]);
