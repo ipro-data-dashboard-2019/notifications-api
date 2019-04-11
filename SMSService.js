@@ -14,7 +14,9 @@ module.exports = class SMSService {
                 body: msg.Body
             })
             notif.save();
-            return 'Completed';
+            resp.end('Received.');
+
+            return;
         })
 
     }
