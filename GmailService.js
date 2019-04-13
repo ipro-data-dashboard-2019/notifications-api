@@ -12,6 +12,10 @@ module.exports = class GmailService {
         this.GmailNotification = require('./models/GmailNotification')(setup);
         this.GmailAuthToken = require('./models/GmailAuthToken')(setup);
 
+        this.GmailAuthToken.deleteMany({}, (err) => {
+            
+        })
+
         const scopes = ['https://www.googleapis.com/auth/gmail.readonly'];
         this.oauth2Client = new google.auth.OAuth2(
             process.env.CLIENT_ID,
@@ -104,6 +108,7 @@ module.exports = class GmailService {
               this.GmailAuthToken.findOne({}, (err, token) => {
                 console.log('Found Gmail auth token stored, using that.')
                 this.oauth2Client.credentials = token;
+                console.log(token);
                 resolve();
               })
             }
