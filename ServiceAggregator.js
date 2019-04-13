@@ -35,7 +35,7 @@ module.exports = class NotificationsManager {
                 return res.send(results);
             });
               
-            app.post('/radioman/since/:sinceid', async function (req, res) {
+            app.post('/' + url_id + '/since/:sinceid', async function (req, res) {
                 const since = parseInt(req.params.sinceid);
             
                 if (isNaN(since)) {
