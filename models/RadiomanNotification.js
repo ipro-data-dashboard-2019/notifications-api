@@ -11,7 +11,7 @@ module.exports = (setup) => {
         calltype: String,
         agency: String,
         dispatcher: String
-    });
+    },{ timestamps: { createdAt: 'created_at'}});
 
     radiomanSchema.plugin(setup.autoIncrement.plugin, 'RadiomanNotification');
 

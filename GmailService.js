@@ -9,8 +9,8 @@ const GMAIL_URL_ID = 'gmail';
 module.exports = class GmailService {
 
     constructor(setup, app, onLogin) {
-
         this.GmailNotification = require('./models/GmailNotification')(setup);
+        this.GmailAuthToken = require('./models/GmailAuthToken')(setup);
 
         const scopes = ['https://www.googleapis.com/auth/gmail.readonly'];
         this.oauth2Client = new google.auth.OAuth2(
@@ -94,20 +94,49 @@ module.exports = class GmailService {
 
     async authenticate(scopes, app) {
         return new Promise((resolve, reject) => {
-          // grab the url that will be used for authorization
-          const authorizeUrl = this.oauth2Client.generateAuthUrl({
-            access_type: 'offline',
-            scope: scopes.join(' '),
+
+          // Check if we already have a token stored
+          
+           this.GmailAuthToken.countDocuments({}, (err, count) => { 
+
+            // There is a token saved, use that! 
+            if (count > 0) {
+              this.GmailAuthToken.findOne({}, (err, token) => {
+                console.log('Found Gmail auth token stored, using that.')
+                this.oauth2Client.credentials = token;
+                resolve();
+              })
+            }
+
+            // Go through the whole flow of generating a new token
+            else {
+                   
+              // grab the url that will be used for authorization
+              const authorizeUrl = this.oauth2Client.generateAuthUrl({
+                access_type: 'offline',
+                scope: scopes.join(' '),
+              });
+              console.log('Authenticate with URL: ' + authorizeUrl)
+
+              app.get("/auth/", async (req, resp) => {
+                resp.end('Authentication successful! Please return to the console.');
+                const {tokens} = await this.oauth2Client.getToken(req.query.code);
+                console.log(tokens);
+
+                const tokenLog = new this.GmailAuthToken(tokens);
+                tokenLog.save();
+
+                this.oauth2Client.credentials = tokens;
+                resolve();
+              })
+            }
           });
-          console.log('Authenticate with URL: ' + authorizeUrl)
+          
+          // If we do, use it
+          // this.oauth2Client.credentials = tokens;
+          // resolve();
 
-          app.get("/auth/", async (req, resp) => {
-            resp.end('Authentication successful! Please return to the console.');
-            const {tokens} = await this.oauth2Client.getToken(req.query.code);
-
-            this.oauth2Client.credentials = tokens;
-            resolve();
-          })
+          // otherwise go through the normal flow
         });
       }
 

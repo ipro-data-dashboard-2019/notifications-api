@@ -45,6 +45,7 @@ const gs = new GmailService(setup, app, _ => {
 const sms = new SMSSerice(setup, app);
 
 const tw = new TwitterService(setup);
+//tw.purge();
 tw.begin();
 
 // Have to handle failed / 503 responses

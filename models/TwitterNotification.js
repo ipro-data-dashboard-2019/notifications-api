@@ -7,7 +7,7 @@ module.exports = (setup) => {
         text: String,
         favorite_count: Number,
         retweet_count: Number
-    });
+    },{ timestamps: { createdAt: 'created_at'}});
 
     twitterNotification.plugin(setup.autoIncrement.plugin, 'TwitterNotification');
 

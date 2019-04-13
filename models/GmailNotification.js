@@ -6,7 +6,7 @@ module.exports = (setup) => {
         body: String,
         from: String,
         subject: String
-    });
+    },{ timestamps: { createdAt: 'created_at'}});
 
     gmailNotification.plugin(setup.autoIncrement.plugin, 'GmailNotification');
 

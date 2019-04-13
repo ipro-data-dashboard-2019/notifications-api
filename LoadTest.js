@@ -4,7 +4,7 @@ const endpoints = ['twitter', 'text', 'gmail', 'radioman'];
 const modes = ['/', '/last/:id', '/since/:id'];
 const test_url = 'http://ipro-redcross.herokuapp.com/';
 
-// Hit x times for every endpoint
+// Hit x times for every endpoint/mode combo
 const load_test_num = 10;
 
 async function load_test() {
@@ -20,10 +20,12 @@ async function load_test() {
                 load_url += mode;
 
                 await request.post(load_url, function (error, response, body) {
-                    console.log(load_url);
-                    console.error('error:', error); // Print the error if one occurred
-                    console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
-                    console.log();
+                    if (response && response.statusCode !== 200) {
+                        console.log(load_url);
+                        console.error('error:', error); // Print the error if one occurred
+                        console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
+                        console.log();
+                    }
                 });
             }
         }

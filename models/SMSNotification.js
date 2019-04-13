@@ -4,7 +4,7 @@ module.exports = (setup) => {
         mid: String,
         body: String,
         from: String
-    });
+    },{ timestamps: { createdAt: 'created_at'}});
 
     smsNotification.plugin(setup.autoIncrement.plugin, 'SMSNotification');
 
