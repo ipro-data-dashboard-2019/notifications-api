@@ -60,7 +60,6 @@ module.exports = class RadiomanService {
                     // New Notificaiton, report and save
                     else {
                         n.save();
-                        //this.notifManager.log(n);
                     }
 
                 }); 

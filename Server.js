@@ -7,6 +7,7 @@ const ServiceAggregator = require('./ServiceAggregator');
 const RadiomanService = require('./RadiomanService');
 const GmailService = require('./GmailService');
 const SMSSerice = require('./SMSService');
+const TwitterService = require('./TwitterService');
 
 // Set up server
 const mongoose = require('mongoose');
@@ -43,6 +44,12 @@ const gs = new GmailService(setup, app, _ => {
 
 const sms = new SMSSerice(setup, app);
 
+const tw = new TwitterService(setup);
+tw.begin();
+
+// Have to handle failed / 503 responses
+// Twitter part may have a memory leak
+
 
 // Aggregate services and setup endpoints for them
-const serviceAggregator = new ServiceAggregator(app, [rs, gs, sms]);
+const serviceAggregator = new ServiceAggregator(app, [rs, gs, sms, tw]);
